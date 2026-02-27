@@ -122,4 +122,15 @@ pipeline {
 ```
 ---
 ## 5. Evidencias de Ejecución
-
+### 5.1. Pipeline CI (GitHub Actions)
+![Evidencia CI](src/main/resources/img/EjecucionCI.png)
+---
+![Evidencia CI](src/main/resources/img/ejecucionci_2.png)
+---
+![Evidencia CI](src/main/resources/img/ejecucionci_3.png)
+---
+### 5.2. Pipeline CD (Jenkins)
+![Evidencia CD](src/main/resources/img/ejecucioncd.png)
+---
+## 6. Conclusión 🏆🏆🏆
+La implementación de este laboratorio demuestra cómo las prácticas DevOps transforman el ciclo de vida del desarrollo de software. Al automatizar la compilación con GitHub Actions y el empaquetado del contenedor con Jenkins, se elimina el trabajo manual propenso a errores, se asegura la calidad del código Java desde el inicio y se estandariza el entorno de ejecución mediante Tomcat y Docker, cumpliendo a cabalidad con los principios de integración y entrega continua.
