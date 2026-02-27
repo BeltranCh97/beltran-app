@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario | Admin Dashboard</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="Dashboard moderno para la administración de inventario y categorías.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+                    <h2>Inventi<span>Sync</span></h2>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active" data-target="dashboard-view">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span>Dashboard</span>
+                    </li>
+                    <li class="nav-item" data-target="categories-view">
+                        <i class="fa-solid fa-tags"></i>
+                        <span>Categorías</span>
+                    </li>
+                    <li class="nav-item" data-target="products-view">
+                        <i class="fa-solid fa-box-open"></i>
+                        <span>Productos</span>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <p>Luis Beltrán &copy; 2026</p>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="search-bar">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" placeholder="Buscar en el inventario...">
+                </div>
+                <div class="user-profile">
+                    <div class="notification-icon">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="avatar">
+                        <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" alt="User Avatar">
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                
+                <!-- Dashboard View -->
+                <section id="dashboard-view" class="view-section active">
+                    <div class="section-header">
+                        <h1>Resumen General</h1>
+                        <p>Estadísticas clave de tu inventario</p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon category-icon"><i class="fa-solid fa-layer-group"></i></div>
+                            <div class="stat-info">
+                                <h3>Total Categorías</h3>
+                                <p id="stat-categories">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon product-icon"><i class="fa-solid fa-cubes"></i></div>
+                            <div class="stat-info">
+                                <h3>Total Productos</h3>
+                                <p id="stat-products">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon value-icon"><i class="fa-solid fa-wallet"></i></div>
+                            <div class="stat-info">
+                                <h3>Valor Inventario</h3>
+                                <p id="stat-value">$0.00</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-adds glass-card mt-4">
+                        <div class="card-header">
+                            <h2>Últimos Productos Añadidos</h2>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table" id="dashboard-recent-table">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Categoría</th>
+                                        <th>Precio</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic rows -->
+                                    <tr><td colspan="4" class="text-center">Cargando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Categories View -->
+                <section id="categories-view" class="view-section hidden">
+                    <div class="section-header flex-between">
+                        <div>
+                            <h1>Gestión de Categorías</h1>
+                            <p>Administra las agrupaciones de tus productos</p>
+                        </div>
+                        <button class="btn btn-primary btn-glow" onclick="categoryUI.openModal()">
+                            <i class="fa-solid fa-plus"></i> Nueva Categoría
+                        </button>
+                    </div>
+                    
+                    <div class="glass-card full-height-card">
+                        <div class="table-responsive">
+                            <table class="data-table" id="categories-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Descripción</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Products View -->
+                <section id="products-view" class="view-section hidden">
+                    <div class="section-header flex-between">
+                        <div>
+                            <h1>Inventario de Productos</h1>
+                            <p>Control de stock, precios y disponibilidad</p>
+                        </div>
+                        <button class="btn btn-primary btn-glow" onclick="productUI.openModal()">
+                            <i class="fa-solid fa-plus"></i> Nuevo Producto
+                        </button>
+                    </div>
+
+                    <div class="glass-card full-height-card">
+                        <div class="product-filters">
+                            <div class="filter-group">
+                                <label><i class="fa-solid fa-filter"></i> Filtrar por Categoría:</label>
+                                <select id="filter-category-select" class="form-control">
+                                    <option value="">Todas las categorías</option>
+                                    <!-- Dynamic options -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table" id="products-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Categoría</th>
+                                        <th>Precio</th>
+                                        <th>Stock</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+
+    <!-- Category Modal -->
+    <div id="category-modal" class="modal-overlay hidden">
+        <div class="modal glass-modal">
+            <div class="modal-header">
+                <h2 id="category-modal-title">Nueva Categoría</h2>
+                <button class="close-btn" onclick="categoryUI.closeModal()"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <form id="category-form">
+                <input type="hidden" id="category-id">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="category-name">Nombre de Categoría <span class="required">*</span></label>
+                        <input type="text" id="category-name" class="form-control" placeholder="Ej. Electrónica" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category-desc">Descripción</label>
+                        <textarea id="category-desc" class="form-control" rows="3" placeholder="Descripción breve..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="categoryUI.closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary btn-glow">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal-overlay hidden">
+        <div class="modal glass-modal modal-lg">
+            <div class="modal-header">
+                <h2 id="product-modal-title">Nuevo Producto</h2>
+                <button class="close-btn" onclick="productUI.closeModal()"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <form id="product-form">
+                <input type="hidden" id="product-id">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="product-name">Nombre del Producto <span class="required">*</span></label>
+                            <input type="text" id="product-name" class="form-control" required placeholder="Ej. Laptop HP">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="product-category">Categoría <span class="required">*</span></label>
+                            <select id="product-category" class="form-control" required>
+                                <option value="" disabled selected>Seleccione una categoría</option>
+                                <!-- Dynamic Options -->
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="product-desc">Descripción</label>
+                        <textarea id="product-desc" class="form-control" rows="2" placeholder="Detalles del producto..."></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="product-price">Precio ($) <span class="required">*</span></label>
+                            <div class="input-icon-wrapper">
+                                <i class="fa-solid fa-dollar-sign"></i>
+                                <input type="number" id="product-price" class="form-control with-icon" step="0.01" min="0" required placeholder="0.00">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="product-stock">Stock <span class="required">*</span></label>
+                            <input type="number" id="product-stock" class="form-control" min="0" required placeholder="0">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="product-status">Estado</label>
+                            <select id="product-status" class="form-control">
+                                <option value="AVAILABLE">Disponible</option>
+                                <option value="LOW_STOCK">Stock Bajo</option>
+                                <option value="OUT_OF_STOCK">Agotado</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="productUI.closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary btn-glow">Guardar Producto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Custom JS -->
+    <script src="js/app.js"></script>
+</body>
+</html>
