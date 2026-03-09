@@ -7,25 +7,70 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-test:
+  build-analyze-test:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout del código
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # Necesario para análisis completo de SonarQube
 
-    # Configuramos el entorno Java (Ejemplo usando Java 21)
-    - name: Configurar JDK 21
+    - name: Configurar JDK 17
       uses: actions/setup-java@v3
       with:
-        java-version: '21'
+        java-version: '17'
         distribution: 'temurin' 
-        cache: maven # Esto acelera futuras ejecuciones
+        cache: maven 
 
-    # Maven compila el código, descarga dependencias y empaqueta el .war
-    - name: Compilar y Empaquetar
-      run: mvn clean package
-
-    # Ejecución de pruebas unitarias
     - name: Ejecutar pruebas
-      run: mvn test
+      run: mvn clean test
+
+    - name: Análisis de Vulnerabilidades con Snyk (Umbral High)
+      uses: snyk/actions/maven@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --severity-threshold=high
+
+    - name: Escaneo de Código con SonarCloud
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        args: >
+          -Dsonar.organization=beltranch97
+          -Dsonar.projectKey=BeltranCh97_beltran-app
+          -Dsonar.host.url=https://sonarcloud.io
+
+    - name: Verificación del Umbral de Calidad (Quality Gate) en SonarCloud
+      uses: SonarSource/sonarqube-quality-gate-action@v1
+      timeout-minutes: 5
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: https://sonarcloud.io
+
+  build-and-push-docker:
+    needs: build-analyze-test # Prosigue solo si pasa el análisis (Snyk y SonarQube)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Autenticar en Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Construir y Subir Imagen Docker a Docker Hub
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/beltran-app:latest
