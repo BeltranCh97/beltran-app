@@ -26,11 +26,11 @@ jobs:
     - name: Ejecutar pruebas
       run: mvn clean test
 
-    - name: Análisis de Vulnerabilidades con Snyk (Umbral High)
+    - name: Análisis de Vulnerabilidades con Snyk (Umbral Low)
       run: |
         curl -Lo ./snyk https://github.com/snyk/snyk/releases/download/v1.1293.0/snyk-linux
         chmod +x snyk mvnw
-        ./snyk test --severity-threshold=high --file=pom.xml
+        ./snyk test --severity-threshold=low --file=pom.xml
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
