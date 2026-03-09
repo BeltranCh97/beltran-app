@@ -27,11 +27,11 @@ jobs:
       run: mvn clean test
 
     - name: Análisis de Vulnerabilidades con Snyk (Umbral High)
-      uses: snyk/actions/maven@master
+      run: |
+        npm install -g snyk
+        snyk test --severity-threshold=high --file=pom.xml
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      with:
-        args: --severity-threshold=high
 
     - name: Escaneo de Código con SonarCloud
       uses: SonarSource/sonarcloud-github-action@master
