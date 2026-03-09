@@ -28,9 +28,8 @@ jobs:
 
     - name: Análisis de Vulnerabilidades con Snyk (Umbral High)
       run: |
-        npm install -g snyk
-        snyk auth ${{ secrets.SNYK_TOKEN }}
-        snyk test --severity-threshold=high --file=pom.xml -d
+        npm install -g snyk --silent
+        snyk test --severity-threshold=high --file=pom.xml --command=mvn
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
