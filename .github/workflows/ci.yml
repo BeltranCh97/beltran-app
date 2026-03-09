@@ -43,14 +43,14 @@ jobs:
         args: >
           -Dsonar.organization=beltranch97
           -Dsonar.projectKey=BeltranCh97_beltran-app
-          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
 
     - name: Verificación del Umbral de Calidad (Quality Gate) en SonarCloud
       uses: SonarSource/sonarqube-quality-gate-action@v1
       timeout-minutes: 5
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: https://sonarcloud.io
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
   build-and-push-docker:
     needs: build-analyze-test # Prosigue solo si pasa el análisis (Snyk y SonarQube)
