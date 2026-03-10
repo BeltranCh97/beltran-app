@@ -29,6 +29,9 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<!-- Override Jackson version to fix Snyk High Severity vulnerabilities like
+		SNYK-JAVA-COMFASTERXMLJACKSONCORE-15365924 -->
+		<jackson-bom.version>2.18.6</jackson-bom.version>
 	</properties>
 	<dependencies>
 		<dependency>
