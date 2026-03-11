@@ -47,6 +47,7 @@ jobs:
           -Dsonar.organization=beltranch97
           -Dsonar.projectKey=BeltranCh97_beltran-app
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+          -Dsonar.java.binaries=target/classes
 
     - name: Verificación del Umbral de Calidad (Quality Gate) en SonarCloud
       uses: SonarSource/sonarqube-quality-gate-action@v1
