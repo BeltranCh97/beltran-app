@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mi-app-devops
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mi-app
+  template:
+    metadata:
+      labels:
+        app: mi-app
+    spec:
+      containers:
+      - name: web-app
+        image: beltranch97/beltran-app:latest # La que subiste en el paso anterior
+        ports:
+        - containerPort: 8100

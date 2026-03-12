@@ -17,16 +17,15 @@ El código fuente, los archivos de configuración del pipeline y la documentaci�
 
 ## 3. Justificación Técnica y Arquitectura del Pipeline
 
-Para este laboratorio se diseñó una arquitectura robusta orientada a entornos corporativos Java:
+Para este laboratorio se diseñó una arquitectura robusta orientada a entornos corporativos Java, integrando herramientas de revisión de código, seguridad y despliegue continuo en clústeres.
 
-1. **Integración Continua (CI) - GitHub Actions:**
-   Se seleccionó GitHub Actions por su integración nativa con el repositorio. El pipeline de CI se activa ante cada `push` o `pull_request` en la rama principal. Se configuró un entorno con **Java JDK 21** y se utilizó **Maven** como gestor de dependencias para compilar el artefacto desplegable (`.war`) y ejecutar las pruebas automatizadas, asegurando que ningún código defectuoso avance en el flujo.
+> 📄 **Documentación Detallada:** Para una explicación extensa de la integración, justificación de herramientas, y estrategias de automatización y reutilización del pipeline, consulta el nuevo documento técnico completo en [**CI_CD_PIPELINE.md**](./CI_CD_PIPELINE.md).
 
-2. **Empaquetado y Servidor Web - Docker Multietapa:**
-   Para garantizar la inmutabilidad y portabilidad, se diseñó un `Dockerfile` multietapa (Multi-stage build). La primera etapa usa Maven para compilar el código fuente. La segunda etapa toma el artefacto `.war` resultante y lo inyecta en una imagen oficial de **Apache Tomcat 9**. Esto reduce drásticamente el peso de la imagen final por seguridad y rendimiento.
+1. **Integración Continua (CI) y Empaquetado - GitHub Actions:**
+   GitHub Actions maneja el ciclo inicial. Ante cada `push` o `pull_request` en `main`, compila el artefacto con **Java JDK 17** y **Maven**, ejecuta pruebas automatizadas, y lanza análisis de seguridad estática iterativos con **Snyk** y **SonarCloud** (SAST/SCA). Finalmente, empaqueta el artefacto `.war` en una imagen **Docker** de Apache Tomcat y la sube al repositorio central de **DockerHub**.
 
-3. **Entrega Continua (CD) - Jenkins:**
-   Se definió el pipeline de CD utilizando un archivo `Jenkinsfile` de formato declarativo. Jenkins se encarga de clonar el repositorio, construir la imagen Docker basándose en el Dockerfile descrito anteriormente, y finalmente autenticarse y publicar la imagen en el registro de contenedores (DockerHub), dejándola lista para ser consumida por un clúster de Kubernetes en fases posteriores.
+2. **Entrega Continua (CD) - Jenkins y Kubernetes:**
+   Jenkins se reconfiguró para actuar como orquestador de entregas a entornos productivos. Mediante el uso de un `Jenkinsfile`, recoge los manifiestos de **Kubernetes** actualizados y reaplica los cambios al clúster (refrescando los pods con la imagen recién subida con la etiqueta `latest`), logrando sincronía total entre el código base y la infraestructura desplegada con cero fricción manual.
 
 ---
 

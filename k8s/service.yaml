@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mi-app-service
+spec:
+  selector:
+    app: mi-app
+  ports:
+    - protocol: TCP
+      port: 80        # Puerto del servicio
+      targetPort: 8100 # Puerto donde corre tu app (Spring Boot)
+  type: NodePort      # Permite acceder desde tu navegador local
